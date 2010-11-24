@@ -27,7 +27,7 @@ import com.openbravo.beans.LocaleResources;
  */
 public class AppLocal {
     
-    public static final String APP_NAME = "Heidi POS";
+    public static final String APP_NAME = "HEIDI POS";
     public static final String APP_ID = "heidipos";
     public static final String APP_VERSION = "2.30.2";
   
