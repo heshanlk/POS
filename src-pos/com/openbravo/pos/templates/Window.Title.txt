@@ -1,1 +1,1 @@
-Heidi POS is a point of sale designed for touch screens.
+HEIDI POS is a point of sale designed for touch screens.
