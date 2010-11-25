@@ -141,7 +141,7 @@ new Double($F{PRICESELL}.doubleValue() * (1.0 + $P{TAXESLOGIC}.getTaxRate($F{TAX
 				<textElement textAlignment="Center">
 					<font fontName="Arial" size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
-				<text><![CDATA[Heidi POS]]></text>
+				<text><![CDATA[HEIDI POS]]></text>
 			</staticText>
 			<image scaleImage="RetainShape" hAlign="Center" vAlign="Middle">
 				<reportElement key="barcode-1" x="13" y="167" width="149" height="46"/>
