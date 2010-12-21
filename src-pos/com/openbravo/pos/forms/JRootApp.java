@@ -42,10 +42,14 @@ import com.openbravo.data.loader.Session;
 import com.openbravo.pos.scale.DeviceScale;
 import com.openbravo.pos.scanpal2.DeviceScanner;
 import com.openbravo.pos.scanpal2.DeviceScannerFactory;
+import java.io.File;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.regex.Matcher;
+
+import com.heidi.keymanager.KeyAuthorizationForm;
+import com.heidi.services.KeyAuthorization;
 
 /**
  *
@@ -85,27 +89,12 @@ public class JRootApp extends JPanel implements AppView {
         jScrollPane1.getVerticalScrollBar().setPreferredSize(new Dimension(35, 35));
     }
 
+
     public boolean initApp(AppProperties props) {
 
-        /* handlig trial version 
+        /* handlig trial version
          *
          */
-       /*
-        Calendar calExp = Calendar.getInstance();
-        Calendar calNow = Calendar.getInstance();
-
-        calExp.set(2010, 10, 30);
-
-        int expDoY = calExp.get(Calendar.DAY_OF_YEAR);
-        int nowDoY = calNow.get(Calendar.DAY_OF_YEAR);
-
-        int demoDays = expDoY - nowDoY;
-
-        if (demoDays <= 0 || demoDays >= 35) {
-            JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_IMPORTANT, "  hPOS demo verion expired please contact company@heidisoft.com"));
-            System.exit(1);
-        }
-        */
 
 
         m_props = props;
@@ -639,8 +628,7 @@ public class JRootApp extends JPanel implements AppView {
             "http://www.heidisoft.com/<br>" +
            
             
-            "<br>" +
-            "You should have received a copy of the GNU General Public License along with Heidi POS.  If not, see http://www.gnu.org/licenses/.<br>" +
+            
             "</center>");
         jLabel1.setAlignmentX(0.5F);
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -649,6 +637,7 @@ public class JRootApp extends JPanel implements AppView {
         jPanel4.add(jLabel1);
 
         m_jPanelLogin.add(jPanel4, java.awt.BorderLayout.CENTER);
+
 
         m_jLogonName.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
         m_jLogonName.setLayout(new java.awt.BorderLayout());

@@ -110,6 +110,18 @@ public class AppConfig implements AppProperties {
 
     }
 
+    public void load2() {
+        try {
+            InputStream in = new FileInputStream(configfile);
+            if (in != null) {
+                m_propsconfig.load(in);
+                in.close();
+            }
+        } catch (IOException e) {
+            //loadDefault();
+        }
+    }
+
     public void save() throws IOException {
 
         OutputStream out = new FileOutputStream(configfile);
@@ -126,11 +138,11 @@ public class AppConfig implements AppProperties {
         String dirname = System.getProperty("dirname.path");
         dirname = dirname == null ? "./" : dirname;
 
-//        m_propsconfig.setProperty("db.driverlib", new File(new File(dirname), "lib/derby.jar").getAbsolutePath());
-//        m_propsconfig.setProperty("db.driver", "org.apache.derby.jdbc.EmbeddedDriver");
-//        m_propsconfig.setProperty("db.URL", "jdbc:derby:" + new File(new File(System.getProperty("user.home")), AppLocal.APP_ID + "-database").getAbsolutePath() + ";create=true");
-//        m_propsconfig.setProperty("db.user", "");
-//        m_propsconfig.setProperty("db.password", "");
+        m_propsconfig.setProperty("db.driverlib", new File(new File(dirname), "lib/derby.jar").getAbsolutePath());
+        m_propsconfig.setProperty("db.driver", "org.apache.derby.jdbc.EmbeddedDriver");
+        m_propsconfig.setProperty("db.URL", "jdbc:derby:" + new File(new File(System.getProperty("user.home")), AppLocal.APP_ID + "-database").getAbsolutePath() + ";create=true");
+        m_propsconfig.setProperty("db.user", "");
+        m_propsconfig.setProperty("db.password", "");
 
 //        m_propsconfig.setProperty("db.driverlib", new File(new File(dirname), "lib/hsqldb.jar").getAbsolutePath());
 //        m_propsconfig.setProperty("db.driver", "org.hsqldb.jdbcDriver");
@@ -138,11 +150,11 @@ public class AppConfig implements AppProperties {
 //        m_propsconfig.setProperty("db.user", "sa");
 //        m_propsconfig.setProperty("db.password", "");
 
-        m_propsconfig.setProperty("db.driverlib", new File(new File(dirname), "lib/mysql-connector-java-5.1.13-bin.jar").getAbsolutePath());
-        m_propsconfig.setProperty("db.driver", "com.mysql.jdbc.Driver");
-        m_propsconfig.setProperty("db.URL", "jdbc:mysql://localhost:3306/pos_shopping_center");
-        m_propsconfig.setProperty("db.user", "root");
-        m_propsconfig.setProperty("db.password", "root");
+//        m_propsconfig.setProperty("db.driverlib", new File(new File(dirname), "lib/mysql-connector-java-5.1.13-bin.jar").getAbsolutePath());
+//        m_propsconfig.setProperty("db.driver", "com.mysql.jdbc.Driver");
+//        m_propsconfig.setProperty("db.URL", "jdbc:mysql://localhost:3306/pos_shopping_center");
+//        m_propsconfig.setProperty("db.user", "root");
+//        m_propsconfig.setProperty("db.password", "root");
 
 //        m_propsconfig.setProperty("db.driver", "org.postgresql.Driver");
 //        m_propsconfig.setProperty("db.URL", "jdbc:postgresql://localhost:5432/database");
@@ -190,5 +202,8 @@ public class AppConfig implements AppProperties {
         m_propsconfig.setProperty("paper.standard.mediasizename", "A4");
 
         m_propsconfig.setProperty("machine.uniqueinstance", "false");
+
+        m_propsconfig.setProperty("machine.local", "point");
+        m_propsconfig.setProperty("machine.install", "h_POS");
     }
 }

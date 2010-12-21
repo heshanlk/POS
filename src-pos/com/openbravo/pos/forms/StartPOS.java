@@ -16,13 +16,18 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package com.openbravo.pos.forms;
+
+import com.heidi.keymanager.KeyAuthorizationForm;
+import com.heidi.services.KeyAuthorization;
+import com.heidi.keymanager.KeyConfig;
 
 import java.util.Locale;
 import javax.swing.UIManager;
 import com.openbravo.format.Formats;
 import com.openbravo.pos.instance.InstanceQuery;
+import java.io.File;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.LookAndFeel;
@@ -36,14 +41,72 @@ import org.jvnet.substance.api.SubstanceSkin;
 public class StartPOS {
 
     private static Logger logger = Logger.getLogger("com.openbravo.pos.forms.StartPOS");
-    
+
     /** Creates a new instance of StartPOS */
     private StartPOS() {
     }
-    
-    
+
+    public static boolean checkAppLicense() {
+        
+        KeyConfig keyConfig= new KeyConfig();
+        keyConfig.load();
+       
+        String localKey = keyConfig.getProperty("machine.local");
+        String license = keyConfig.getProperty("machine.install");
+
+        KeyAuthorization authorization = new KeyAuthorization();
+
+        try {
+            if (authorization.checkLocalKey(localKey, license)) {
+                javax.swing.JOptionPane.showConfirmDialog((java.awt.Component) null, "Registered Key Found", "Key Activation",
+                        javax.swing.JOptionPane.DEFAULT_OPTION);
+                return true;
+            }
+//            else if (checkTrialVersion()) {
+//               /* javax.swing.JOptionPane.showConfirmDialog((java.awt.Component) null, "Please register your POS Key ", "Key Activation",
+//                        javax.swing.JOptionPane.DEFAULT_OPTION);*/
+//                return true;
+//
+//            }
+            else {
+                javax.swing.JOptionPane.showConfirmDialog((java.awt.Component) null, "Please register your POS Key ", "Key Activation",
+                        javax.swing.JOptionPane.DEFAULT_OPTION);
+                return false;
+
+            }
+        } catch (Exception ex) {
+            javax.swing.JOptionPane.showConfirmDialog((java.awt.Component) null, "Key check failed", "Key Activation",
+                    javax.swing.JOptionPane.DEFAULT_OPTION);
+            return false;
+
+        }
+
+    }
+
+    public static boolean checkTrialVersion() {
+
+        Calendar calExp = Calendar.getInstance();
+        Calendar calNow = Calendar.getInstance();
+
+        calExp.set(2010, 11, 17);
+
+        int expDoY = calExp.get(Calendar.DAY_OF_YEAR);
+        int nowDoY = calNow.get(Calendar.DAY_OF_YEAR);
+
+        int demoDays = expDoY - nowDoY;
+
+        if (demoDays <= 0 || demoDays >= 20) {
+            //JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_IMPORTANT, "  hPOS demo verion expired please contact company@heidisoft.com"));
+            javax.swing.JOptionPane.showConfirmDialog((java.awt.Component) null, "hPOS demo verion expired please contact company@heidisoft.com",
+                    "hPos Demo",
+                    javax.swing.JOptionPane.DEFAULT_OPTION);
+            return false;
+        }
+        return true;
+    }
+
     public static boolean registerApp() {
-                       
+
         // vemos si existe alguna instancia        
         InstanceQuery i = null;
         try {
@@ -52,29 +115,30 @@ public class StartPOS {
             return false;
         } catch (Exception e) {
             return true;
-        }  
+        }
     }
-    
-    public static void main (final String args[]) {
-        
+
+    public static void main(final String args[]) {
+
         java.awt.EventQueue.invokeLater(new Runnable() {
+
             public void run() {
-                
+
                 if (!registerApp()) {
                     System.exit(1);
                 }
-                
+
                 AppConfig config = new AppConfig(args);
                 config.load();
-                
+
                 // set Locale.
                 String slang = config.getProperty("user.language");
                 String scountry = config.getProperty("user.country");
                 String svariant = config.getProperty("user.variant");
-                if (slang != null && !slang.equals("") && scountry != null && svariant != null) {                                        
+                if (slang != null && !slang.equals("") && scountry != null && svariant != null) {
                     Locale.setDefault(new Locale(slang, scountry, svariant));
                 }
-                
+
                 // Set the format patterns
                 Formats.setIntegerPattern(config.getProperty("format.integer"));
                 Formats.setDoublePattern(config.getProperty("format.double"));
@@ -82,31 +146,38 @@ public class StartPOS {
                 Formats.setPercentPattern(config.getProperty("format.percent"));
                 Formats.setDatePattern(config.getProperty("format.date"));
                 Formats.setTimePattern(config.getProperty("format.time"));
-                Formats.setDateTimePattern(config.getProperty("format.datetime"));               
-                
+                Formats.setDateTimePattern(config.getProperty("format.datetime"));
+
                 // Set the look and feel.
-                try {             
-                    
+                try {
                     Object laf = Class.forName(config.getProperty("swing.defaultlaf")).newInstance();
-                    
-                    if (laf instanceof LookAndFeel){
+
+                    if (laf instanceof LookAndFeel) {
                         UIManager.setLookAndFeel((LookAndFeel) laf);
-                    } else if (laf instanceof SubstanceSkin) {                      
-                        SubstanceLookAndFeel.setSkin((SubstanceSkin) laf);                   
+                    } else if (laf instanceof SubstanceSkin) {
+                        SubstanceLookAndFeel.setSkin((SubstanceSkin) laf);
                     }
                 } catch (Exception e) {
                     logger.log(Level.WARNING, "Cannot set look and feel", e);
                 }
-                
+
                 String screenmode = config.getProperty("machine.screenmode");
-                if ("fullscreen".equals(screenmode)) {
-                    JRootKiosk rootkiosk = new JRootKiosk();
-                    rootkiosk.initFrame(config);
+
+//                if (checkAppLicense()) {
+                if(true){
+
+                    if ("fullscreen".equals(screenmode)) {
+                        JRootKiosk rootkiosk = new JRootKiosk();
+                        rootkiosk.initFrame(config);
+                    } else {
+                        JRootFrame rootframe = new JRootFrame();
+                        rootframe.initFrame(config);
+                    }
                 } else {
-                    JRootFrame rootframe = new JRootFrame(); 
-                    rootframe.initFrame(config);
+                    KeyAuthorizationForm KeyForm = new KeyAuthorizationForm();
+                    KeyForm.setVisible(true);
                 }
             }
-        });    
-    }    
+        });
+    }
 }
