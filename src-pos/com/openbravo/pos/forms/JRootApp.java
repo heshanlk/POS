@@ -623,13 +623,8 @@ public class JRootApp extends JPanel implements AppView {
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/logo.png"))); // NOI18N
-        jLabel1.setText("<html><center>Heidi POS is a point of sale application designed for touch screens.<br>" +
-            
-            "http://www.heidisoft.com/<br>" +
-           
-            
-            
-            "</center>");
+        jLabel1.setText("<html><center>HEIDI POS is a point of sale application designed for touch screens.<br>" +
+            "http://www.heidisoft.com/<br>" + "</center>");
         jLabel1.setAlignmentX(0.5F);
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jLabel1.setMaximumSize(new java.awt.Dimension(800, 1024));
